@@ -62,7 +62,8 @@ namespace HappyGenyuanImsactUpdate
                 }
 
                 File.Delete(hdifftxtPath);
-            } else if (File.Exists(hdiffjsonPath))
+            }
+            else if (File.Exists(hdiffjsonPath))
             {
                 using (StreamReader hdiffreader = new(hdiffjsonPath))
                 {
@@ -82,7 +83,7 @@ namespace HappyGenyuanImsactUpdate
                         if (!File.Exists(sourcePathstd)) continue;
 
                         string hdiffName = datadir.FullName + '/' + file.patch_file_name;
-                        string hdiffPathstd = new FileInfo(sourceName).FullName;
+                        string hdiffPathstd = new FileInfo(hdiffName).FullName;
 
                         string targetName = datadir.FullName + '/' + file.target_file_name;
 
@@ -92,10 +93,11 @@ namespace HappyGenyuanImsactUpdate
                             CmdLine = $"-f \"{sourceName}\" \"{hdiffName}\" \"{targetName}\"",
                             AutoTerminateReason = $"hdiff patch for \"{hdiffName}\" failed."
                         });
-                        hdiffs.Add(sourcePathstd);
                         hdiffs.Add(hdiffPathstd);
                     }
                 }
+                string hdiffjsonPathstd = new FileInfo(hdiffjsonPath).FullName;
+                hdiffs.Add(hdiffjsonPathstd);
             }
 
             await OuterInvoke.RunMultiple(invokes, 3851, 2);
@@ -103,7 +105,7 @@ namespace HappyGenyuanImsactUpdate
             // Delete .hdiff afterwards
             foreach (var hdiffFile in hdiffs)
             {
-                File.Delete($"{hdiffFile}");
+                File.Delete(hdiffFile);
             }
         }
         #endregion
